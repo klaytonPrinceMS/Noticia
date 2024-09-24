@@ -78,10 +78,4 @@ def menu():
         case _:
             print('Opção valida')
             menu()
-#menu()
-
-site = Sites()
-noticia = Noticias()
-noticia.versao()
-
-
+menu()
