@@ -1,0 +1,5 @@
+parsel==1.9.1
+httpx==0.27.2
+#loguru==0.7.2              #Desenvolvimento
+#ipython==8.27.0            #Desenvolvimento
+#auto-py-to-exe==2.44.1     #Desenvolvimento
