@@ -7,7 +7,7 @@
 *Analista de Sistema Responsavel: PRINCE, K.B Matricula 010698*
 
 
-## Nome do projeto Principal:relogioDigital
+## Nome do projeto Principal:Noticia agregador DTI
 1. -> Noticias 
    2. executavel jornal.exe
 
