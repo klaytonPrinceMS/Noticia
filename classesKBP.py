@@ -13,12 +13,10 @@ get_noticiasGN(urlSite, tagPrincipal='.gPFEn', tagTexto='a::text', tagUrl='::att
 get_noticiasBBC(urlSite, tagPrincipal='.bbc-uk8dsi', tagTexto='a::text', tagUrl='::attr(href)', imprimir=True)  :Percorre sites de noticia padrao BBC e armazena em noticias em uma variavel
 gerarSite() : Gera o site com os dados dos links armazenados na variavel retorna = []
 '''
-
-
-
+from pickle import TUPLE
 
 import httpx, parsel, os, webbrowser
-
+from urllib.parse import quote as converterUrl
 class Sites:
     def __init__(self):
         self.versao                 = '1.0.20240924'
@@ -39,6 +37,8 @@ class Sites:
         self.gn_entretenimento  = f'https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNREpxYW5RU0JYQjBMVUpTR2dKQ1VpZ0FQAQ?hl=pt-BR&gl=BR&ceid=BR%3Apt-419'
         self.gn_esporte         = f'https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFp1ZEdvU0JYQjBMVUpTR2dKQ1VpZ0FQAQ?hl=pt-BR&gl=BR&ceid=BR%3Apt-419'
         self.gn_principais      = f'https://news.google.com/topics/news.google.com/?hl=pt-BR&gl=BR&ceid=BR%3Apt-419'
+
+        self.msm_jfp                = f'https://jfpnoticias.com.br/monte-santo-de-minas/'
     def versaoClasse(self, imprimir=True):
         '''
         Função por padrao imprimi a versao da classe
@@ -53,6 +53,119 @@ class Noticias():
     def __init__(self):
         self.versao                 = '1.0.20240924'
         self.retorna                = []
+
+    def gerarSite(self, titulo='Atualizadas'):
+            '''
+            Função gera site com as noticias
+            :param : Não existe paramentros
+            Acessa os dados da variavel "retorna = []" e gera um arquivo de nome noticia.html apresnetando o texto do titulo das noticias e disponibilizando o link
+            :return: Não existe Retorno
+            '''
+            arquivo = fr'index.html'
+            if os.path.exists(arquivo):
+                os.remove(arquivo)
+            html = f"""
+    <!DOCTYPE html>
+    <!--[if IE 8 ]><html class="no-js oldie ie8" lang="en"> <![endif]-->
+    <!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
+    <!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+    <head>
+       	<meta charset="utf-8">
+    	<title>DTI - MSM</title>
+    	<meta name="PRINCE. K,B" content="">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    	<link rel="stylesheet" href="static/css/base.css">
+    	<link rel="stylesheet" href="static/css/main.css">
+    	<link rel="stylesheet" href="static/css/vendor.css">
+    	<script src="js/modernizr.js"></script>
+    	<script src="js/pace.min.js"></script>
+    	<link rel="icon" type="image/png" href="static/favicon.png">
+    </head>
+
+    <body id="top">
+       	<section id="intro">
+    		<div class="intro-overlay"></div>
+            <div class="intro-content">
+                <div class="row">
+                    <div class="col-twelve">
+                        <h5>PRINCE. K,B.</h5>
+                        <h1>DTI - Notícias</h1>
+                        <p class="intro-position">
+                            <span></span>
+                            <span>Pref. Municipal de Monte Santo de Minas</span>
+                            <span></span>
+                        </p>
+                        <a class="button stroke smoothscroll" href="#about" title="">Inicio</a>
+                        <a class="button stroke smoothscroll" href="#services" title="">Fim</a>
+                    </div>
+                </div>
+            </div> 
+    	</section> 
+
+    	<section id="about">
+    		<div class="row section-intro">
+    			<div class="col-twelve">
+    				<h5>Principais notícias</h5>
+    				<h1>Tema da pesquisa: {titulo}</h1>
+    			</div>
+    		</div>
+    		<div class="row about-content">
+    	   		<div class="col-six tab-full">
+    				<ul class="info-list">
+    					<li>
+    """
+
+            for noticia, link in self.retorna:
+                html += f"""
+                            <br>
+                            <span><a href="{link}" target="_blank">{noticia}</a></span>
+                            <strong>-------------------------------------</strong>
+                """
+
+            html += """
+    					</li>
+    				</ul> 
+    			</div>
+            </div>
+
+        <div class="row button-section">
+        </div>
+    </section> 
+
+
+    <section id="services">
+        <div class="row services-content">
+    	    <div id="owl-slider" class="owl-carousel services-list">
+    	    </div>
+    	</div> 
+    </section>
+
+    <footer>
+        <div class="row">
+            <div class="col-six tab-full">
+                <div class="copyright">
+                    <span>© Copyright DTI</span>
+                    <span>Design by <a href="https://twitter.com/TI_SOS_Sistemas">Klayton</a></span>
+                </div>		                  
+                </div>
+                <div id="go-top">
+                <a class="smoothscroll" title="Back to Top" href="#top"><i class="fa fa-long-arrow-up"></i></a>
+            </div>
+        </div>  	
+    </footer>  
+        <div id="preloader"> 
+        <div id="loader"></div>
+        </div> 
+        <script src="js/jquery-2.1.3.min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        </body>
+    </html>
+    """
+            with open(arquivo, 'w', encoding='utf-8') as f:
+                f.write(html)
+            webbrowser.open(f'file://{os.path.abspath(arquivo)}')
+            self.apagarNoticias()
     def versaoClasse(self, imprimir=True):
         '''
         Função por padrao imprimi a versao da classe
@@ -81,6 +194,26 @@ class Noticias():
         '''
         site_html_parsed = parsel.Selector(text=self.get_html_text(urlSite))
         return site_html_parsed
+    def get_noticiasPadrao(self, urlSite, tagPrincipal='a', tagTexto='::text', tagUrl='::attr(href)', imprimir=True):
+        '''
+        Função acessa site Padra~p, faz o parse do html, pega uma parte do html com todos os links das noticias e entre em loop pegando o texto das noticias e o link
+        :param urlSite: url do site que será parseado
+        :param tagPrincipal: tag principal do site onde esta todos os itens com os links das noticias
+        :param tagTexto: formato da tag onde esta o texto das noticias
+        :param tagUrl: formato da tag onde esta o link
+        :param imprimir: se o parametro imprimir for True o resultado da função ira salvar na variavel e ira imprimir o conteudo no terminal sem a extração dos dados
+        :return: retorna para o obejeto a variavel retorna = [] com os dados obtidos no site
+        '''
+        seletores = self.get_selectores_html(urlSite=urlSite)
+        for x in seletores.css(tagPrincipal):
+            retornaTexto = f'{x.css(tagTexto).get()}'
+            retornaLink  = f'{x.css(tagUrl).get()}'
+            if (retornaLink not in self.retorna) and (retornaTexto not in ['Local','Página inicial','Para você','Destaques jornalísticos','Brasil','Negócios','Entreterimento','Saúde','Seguindo','Destaques Jornalísticos','Mundo','Ciência e tecnologia','Entretenimento','Esportes','','','']):
+                if (retornaTexto != "None"):
+                    self.retorna.append((retornaTexto, retornaLink))
+            if imprimir:
+                print(x)
+        return self.retorna
     def get_noticiasGN(self, urlSite, tagPrincipal='.gPFEn', tagTexto='a::text', tagUrl='::attr(href)', imprimir=False):
         '''
         Função acessa site do Google News, faz o parse do html, pega uma parte do html com todos os links das noticias e entre em loop pegando o texto das noticias e o link
@@ -122,124 +255,27 @@ class Noticias():
             if imprimir:
                 print(x)
         return self.retorna
-    def gerarSite(self, titulo='Atualizadas'):
+    def get_noticiasJFP(self, urlSite, tagPrincipal='.td-module-title a', tagTexto='a::text', tagUrl='::attr(href)', imprimir=False):
         '''
-        Função gera site com as noticias
-        :param : Não existe paramentros
-        Acessa os dados da variavel "retorna = []" e gera um arquivo de nome noticia.html apresnetando o texto do titulo das noticias e disponibilizando o link
-        :return: Não existe Retorno
+        Função acessa site Padra~p, faz o parse do html, pega uma parte do html com todos os links das noticias e entre em loop pegando o texto das noticias e o link
+        :param urlSite: url do site que será parseado
+        :param tagPrincipal: tag principal do site onde esta todos os itens com os links das noticias
+        :param tagTexto: formato da tag onde esta o texto das noticias
+        :param tagUrl: formato da tag onde esta o link
+        :param imprimir: se o parametro imprimir for True o resultado da função ira salvar na variavel e ira imprimir o conteudo no terminal sem a extração dos dados
+        :return: retorna para o obejeto a variavel retorna = [] com os dados obtidos no site
         '''
-        arquivo = fr'index.html'
-        if os.path.exists(arquivo):
-            os.remove(arquivo)
-        html =f"""
-<!DOCTYPE html>
-<!--[if IE 8 ]><html class="no-js oldie ie8" lang="en"> <![endif]-->
-<!--[if IE 9 ]><html class="no-js oldie ie9" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
-<head>
-   	<meta charset="utf-8">
-	<title>DTI - MSM</title>
-	<meta name="PRINCE. K,B" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link rel="stylesheet" href="static/css/base.css">
-	<link rel="stylesheet" href="static/css/main.css">
-	<link rel="stylesheet" href="static/css/vendor.css">
-	<script src="js/modernizr.js"></script>
-	<script src="js/pace.min.js"></script>
-	<link rel="icon" type="image/png" href="static/favicon.png">
-</head>
+        seletores = self.get_selectores_html(urlSite=urlSite)
+        for x in seletores.css(tagPrincipal):
+            retornaTexto = f'{x.css(tagTexto).get()}'
+            retornaLink  = f'{x.css(tagUrl).get()}'
+            if (retornaLink not in self.retorna) and (retornaTexto not in ['Local','Página inicial','Para você','Destaques jornalísticos','Brasil','Negócios','Entreterimento','Saúde','Seguindo','Destaques Jornalísticos','Mundo','Ciência e tecnologia','Entretenimento','Esportes','','','']):
+                if (retornaTexto != "None"):
+                    self.retorna.append((retornaTexto, retornaLink))
+            if imprimir:
+                try:
+                    print(retornaTexto, retornaLink)
+                except:
+                    print(x)
 
-<body id="top">
-   	<section id="intro">
-		<div class="intro-overlay"></div>
-        <div class="intro-content">
-            <div class="row">
-                <div class="col-twelve">
-                    <h5>PRINCE. K,B.</h5>
-                    <h1>DTI - Notícias</h1>
-                    <p class="intro-position">
-                        <span></span>
-                        <span>Pref. Municipal de Monte Santo de Minas</span>
-                        <span></span>
-                    </p>
-                    <a class="button stroke smoothscroll" href="#about" title="">Inicio</a>
-                    <a class="button stroke smoothscroll" href="#services" title="">Fim</a>
-                </div>
-            </div>
-        </div> 
-	</section> 
-
-	<section id="about">
-		<div class="row section-intro">
-			<div class="col-twelve">
-				<h5>Principais notícias</h5>
-				<h1>Tema da pesquisa: {titulo}</h1>
-			</div>
-		</div>
-		<div class="row about-content">
-	   		<div class="col-six tab-full">
-				<ul class="info-list">
-					<li>
-"""
-
-
-
-        for noticia, link in self.retorna:
-            html += f"""
-                        <br>
-                        <span><a href="{link}" target="_blank">{noticia}</a></span>
-                        <strong>-------------------------------------</strong>
-            """
-
-
-
-
-        html +="""
-					</li>
-				</ul> 
-			</div>
-        </div>
-        
-    <div class="row button-section">
-    </div>
-</section> 
-
-
-<section id="services">
-    <div class="row services-content">
-	    <div id="owl-slider" class="owl-carousel services-list">
-	    </div>
-	</div> 
-</section>
-
-<footer>
-    <div class="row">
-        <div class="col-six tab-full">
-            <div class="copyright">
-                <span>© Copyright DTI</span>
-                <span>Design by <a href="https://twitter.com/TI_SOS_Sistemas">Klayton</a></span>
-            </div>		                  
-            </div>
-            <div id="go-top">
-            <a class="smoothscroll" title="Back to Top" href="#top"><i class="fa fa-long-arrow-up"></i></a>
-        </div>
-    </div>  	
-</footer>  
-    <div id="preloader"> 
-    <div id="loader"></div>
-    </div> 
-    <script src="js/jquery-2.1.3.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
-    </body>
-</html>
-"""
-        with open(arquivo, 'w', encoding='utf-8') as f:
-            f.write(html)
-        webbrowser.open(f'file://{os.path.abspath(arquivo)}')
-        self.apagarNoticias()
-
-
-
-
+        return self.retorna

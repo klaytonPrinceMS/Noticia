@@ -26,6 +26,7 @@ def menu():
     5  - Ciências e Tecnologia
     6  - Entretenimento
     7  - Esporte
+    10 - Monte Santo de Minas
     ''')
     opcao = str(input('Qual opção de noticias:'))
 
@@ -33,13 +34,19 @@ def menu():
         case '0':
             pesquisar = str(input("Qual tema vamos buscar: "))
             print('''
-1 - Fonte Google News            
+1 - Fonte Google News    
+2 - Fonte JFP Noticias        
             ''')
             opcao1 = str(input("Qual base de dados usar: "))
             match opcao1:
                 case '1':
                     os.system('cls')
                     noticias.get_noticiasGN(urlSite=fr'https://news.google.com/search?q={converterUrl(string=pesquisar)}&hl=pt-BR&gl=BR&ceid=BR%3Apt-419', tagPrincipal='.JtKRv')
+                    noticias.gerarSite(titulo=pesquisar)
+                    menu()
+                case '2':
+                    os.system('cls')
+                    noticias.get_noticiasJFP(urlSite=f'https://jfpnoticias.com.br/?s={converterUrl(string=pesquisar)}')
                     noticias.gerarSite(titulo=pesquisar)
                     menu()
         case '1': # Brasil
@@ -74,6 +81,10 @@ def menu():
         case '7': # esporte
             noticias.get_noticiasGN(urlSite=site.gn_esporte)
             noticias.gerarSite(titulo='Esporte')
+            menu()
+        case '10': # Monte Santo de Minas
+            noticias.get_noticiasJFP(urlSite=site.msm_jfp)
+            noticias.gerarSite(titulo='Monte Santo de Minas')
             menu()
         case _:
             print('Opção valida')
