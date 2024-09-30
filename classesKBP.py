@@ -184,8 +184,11 @@ class Noticias():
         :param urlSite: URL do site que será feito o get
         :return: html no formato texto
         '''
-        site_html_text = httpx.get(url=urlSite).text
-        return site_html_text
+        try:
+            site_html_text = httpx.get(url=urlSite).text
+            return site_html_text
+        except:
+            return 'erro na captura do site'
     def get_selectores_html(self, urlSite):
         '''
         Função utiliza de outra função interna da classe, que retorna o html em formato de texto, pega o texto e faz um parse e retorna o html parseado
