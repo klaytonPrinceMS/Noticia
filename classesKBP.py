@@ -13,10 +13,9 @@ get_noticiasGN(urlSite, tagPrincipal='.gPFEn', tagTexto='a::text', tagUrl='::att
 get_noticiasBBC(urlSite, tagPrincipal='.bbc-uk8dsi', tagTexto='a::text', tagUrl='::attr(href)', imprimir=True)  :Percorre sites de noticia padrao BBC e armazena em noticias em uma variavel
 gerarSite() : Gera o site com os dados dos links armazenados na variavel retorna = []
 '''
-from pickle import TUPLE
 
 import httpx, parsel, os, webbrowser
-from urllib.parse import quote as converterUrl
+
 class Sites:
     def __init__(self):
         self.versao                 = '1.0.20240924'
@@ -39,6 +38,7 @@ class Sites:
         self.gn_principais      = f'https://news.google.com/topics/news.google.com/?hl=pt-BR&gl=BR&ceid=BR%3Apt-419'
 
         self.msm_jfp                = f'https://jfpnoticias.com.br/monte-santo-de-minas/'
+        self.agenciaBrasil      = f'https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml'
     def versaoClasse(self, imprimir=True):
         '''
         Função por padrao imprimi a versao da classe
@@ -279,3 +279,13 @@ class Noticias():
                     print(x)
 
         return self.retorna
+
+
+
+
+
+
+
+
+
+

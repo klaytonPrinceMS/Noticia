@@ -33,10 +33,7 @@ def menu():
     match opcao:
         case '0':
             pesquisar = str(input("Qual tema vamos buscar: "))
-            print('''
-1 - Fonte Google News    
-2 - Fonte JFP Noticias        
-            ''')
+            print('''\n1 - Fonte Google News\n2 - Fonte JFP Noticias''')
             opcao1 = str(input("Qual base de dados usar: "))
             match opcao1:
                 case '1':
