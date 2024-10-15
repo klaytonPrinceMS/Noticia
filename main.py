@@ -10,7 +10,7 @@ def menu():
     cria uma instÂncia da classe Noticias()
     Gera o menu e apos escolha faz a leitura das noticias solicitadas e gera um arquivo index.html e abre o arquivo no navegador padrão
     :return: Sem retorno
-    teste
+    teste 1
     '''
     os.system('cls')
     site = Sites()
